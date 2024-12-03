@@ -1,0 +1,29 @@
+local function newPlayer(x, y, vx, vy)
+    return {
+        position = {x, y},
+        velx = vx,
+        vely = vy
+    }
+end
+
+local function newEnemy(x, y, vx, vy, lookside)
+    return {
+        position = {x, y},
+        velx = vx,
+        vely = vy,
+        look = lookside
+    }
+end
+
+local function newTotem(x, y, type)
+    return {
+        position = {x, y},
+        tipo = type,
+    }
+end
+
+return {
+    newPlayer = newPlayer,
+    newEnemy = newEnemy,
+    newTotem = newTotem
+}
