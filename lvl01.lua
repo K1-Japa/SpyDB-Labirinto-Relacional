@@ -13,8 +13,12 @@ local minigameType = {
     },
     DTB = {
         typeName = "Decodificar Tabelas",
-        imgs = {},
-        answers = {}
+        imgs = {
+            Nome = "Nome.png",
+            Codificado = {"./imgs/lvl01/cCol01.png", "./imgs/lvl01/cCol02.png", "./imgs/lvl01/cCol03.png"},
+            Decodificado = {"./imgs/lvl01/dCol01.png", "./imgs/lvl01/dCol02.png", "./imgs/lvl01/dCol03.png"},
+        },
+        answers = {"Nome coluna 01", "Nome coluna 02", "Nome coluna 03"}
     }
 }
 
@@ -45,7 +49,22 @@ local aux = {
     answers = {"Nome", "CPF"}
 }
 
-table.insert(totems, constructors.newTotem(10, 9, aux))
+-- table.insert(totems, constructors.newTotem(10, 9, aux))
+
+
+aux = nil
+
+aux = {
+    typeName = "Decodificar Tabelas",
+    imgs = {
+            Nome = "Nome.png",
+            Codificado = {"./imgs/lvl01/cCol01.png", "./imgs/lvl01/cCol02.png", "./imgs/lvl01/cCol03.png"},
+            Decodificado = {"./imgs/lvl01/dCol01.png", "./imgs/lvl01/dCol02.png", "./imgs/lvl01/dCol03.png"},
+        },
+    answers = {"Nome coluna 01", "Nome coluna 02", "Nome coluna 03"}
+}
+
+table.insert(totems, constructors.newTotem(9, 9, aux))
 
 local function Game()
     return map, player, enemys, totems

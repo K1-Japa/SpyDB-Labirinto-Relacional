@@ -9,7 +9,7 @@ local minigame = require("minigame")
 local lvl01 = require("lvl01")
 local lvl02 = require("lvl02")
 
-local text = "Resposta:"
+local text = ""
 
 -- Fazer o jogador escolher o Diagrama certo (Tipo o diagrama com um relacionamento quaternário)
 
@@ -52,7 +52,7 @@ function love.load()
     love.keyboard.setKeyRepeat(true)
 end
 
-local map, player, enemys, totems = lvl02.Game()
+local map, player, enemys, totems = lvl01.Game()
 
 local tela = screen.set(player, propW, propH)
 
@@ -71,7 +71,7 @@ function love.update(dt)
 
     tempoAcumulado = tempoAcumulado + dt
 
-    isDown, substate, currentTotem, lifes = movement.keyboardInput(player, totems, isDown, substate, currentTotem, lifes)
+    isDown, substate, currentTotem, lifes, text = movement.keyboardInput(player, totems, isDown, substate, currentTotem, lifes, text)
 
     colision.enemyLook(player, enemys)
 
@@ -84,6 +84,8 @@ function love.update(dt)
     if state == "inGame" then
         if substate == minigameType.DER then
             minigameIsDown, substate, lifes = minigame.DER(minigameIsDown, currentTotem, substate, lifes)
+        elseif substate == minigameType.DTB then
+            minigameIsDown, substate, lifes, text = minigame.DTB(minigameIsDown, currentTotem, substate, lifes, text)
         end
     end
 

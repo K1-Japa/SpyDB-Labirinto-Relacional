@@ -11,7 +11,8 @@ local function newEnemy(x, y, vx, vy, lookside)
         position = {x, y},
         velx = vx,
         vely = vy,
-        look = lookside
+        look = lookside,
+        lastPosition = {x, y, lookside}
     }
 end
 

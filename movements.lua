@@ -1,4 +1,4 @@
-local function keyboardInput(player, totems, isDown, substate, currentTotem, lifes)
+local function keyboardInput(player, totems, isDown, substate, currentTotem, lifes, text)
     if substate == "Play" then
         if love.keyboard.isDown("w", "up") then
             if not isDown then
@@ -27,6 +27,7 @@ local function keyboardInput(player, totems, isDown, substate, currentTotem, lif
                         lifes = 3
                         substate = totem.tipo.typeName
                         currentTotem = totem
+                        text = ""
                     end
                 end
             end
@@ -45,7 +46,7 @@ local function keyboardInput(player, totems, isDown, substate, currentTotem, lif
         end
     end
 
-    return isDown, substate, currentTotem, lifes
+    return isDown, substate, currentTotem, lifes, text
 end
 
 local function playerNewPosition(player)
@@ -61,19 +62,19 @@ local function enemyMovement(contador, tempoAcumulado, enemys, constructors, map
         for _, enemy in ipairs(enemys) do
             local direcoes = {}
 
-            if map[(enemy.position[2]-1)][enemy.position[1]] == 2 then
+            if map[(enemy.position[2]-1)][enemy.position[1]] == 2 and ((enemy.position[2]-1) ~= enemy.lastPosition[2] or enemy.position[1] ~= enemy.lastPosition[1]) then
                 table.insert(direcoes, constructors.newEnemy(enemy.position[1], (enemy.position[2]-1), 0, 0, "up"))
             end
 
-            if map[(enemy.position[2]+1)][enemy.position[1]] == 2 then
+            if map[(enemy.position[2]+1)][enemy.position[1]] == 2 and ((enemy.position[2]+1) ~= enemy.lastPosition[2] or enemy.position[1] ~= enemy.lastPosition[1]) then
                 table.insert(direcoes, constructors.newEnemy(enemy.position[1], (enemy.position[2]+1), 0, 0, "down"))
             end
 
-            if map[(enemy.position[2])][enemy.position[1]-1] == 2 then
+            if map[(enemy.position[2])][enemy.position[1]-1] == 2 and (enemy.position[2] ~= enemy.lastPosition[2] or (enemy.position[1]-1) ~= enemy.lastPosition[1]) then
                 table.insert(direcoes, constructors.newEnemy((enemy.position[1]-1), enemy.position[2], 0, 0, "left"))
             end
 
-            if map[(enemy.position[2])][enemy.position[1]+1] == 2 then
+            if map[(enemy.position[2])][enemy.position[1]+1] == 2 and (enemy.position[2] ~= enemy.lastPosition[2] or (enemy.position[1]+1) ~= enemy.lastPosition[1]) then
                 table.insert(direcoes, constructors.newEnemy((enemy.position[1]+1), enemy.position[2], 0, 0, "right"))
             end
 
@@ -81,11 +82,15 @@ local function enemyMovement(contador, tempoAcumulado, enemys, constructors, map
                 local enemyRand = math.random(1, #direcoes)
                 local newStatus = direcoes[enemyRand]
 
-                if map[newStatus.position[2]][newStatus.position[1]] == 2 then
-                    enemy.position[1] = newStatus.position[1]
-                    enemy.position[2] = newStatus.position[2]
-                    enemy.look = newStatus.look
-                end
+                enemy.lastPosition = {enemy.position[1], enemy.position[2], enemy.look}
+
+                enemy.position[1] = newStatus.position[1]
+                enemy.position[2] = newStatus.position[2]
+                enemy.look = newStatus.look
+            else
+                enemy.position[1] = enemy.lastPosition[1]
+                enemy.position[2] = enemy.lastPosition[2]
+                enemy.look = enemy.lastPosition[3]
             end
         end
     end
