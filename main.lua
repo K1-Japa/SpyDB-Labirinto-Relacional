@@ -61,6 +61,7 @@ function love.load()
 end
 
 local playerImg = loadImage("imgs/player.png")
+local enemyImg = loadImage("imgs/enemy.png")
 
 local map, player, enemys, totems = lvl01.Game()
 
@@ -131,7 +132,7 @@ function love.draw()
 
     draw.drawTotems(totems, tela, propW, propH, tamW, tamH)
 
-    draw.drawEnemys(enemys, tela, propW, propH, tamW, tamH)
+    draw.drawEnemys(enemys, enemyImg, tela, propW, propH, tamW, tamH)
 
     draw.drawPlayer(player, playerImg, tela, propW, propH, tamW, tamH)
 

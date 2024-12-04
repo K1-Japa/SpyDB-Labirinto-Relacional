@@ -41,15 +41,38 @@ local function drawTotems(totems, tela, propW, propH, tamW, tamH)
     end
 end
 
-local function drawEnemys(enemys, tela, propW, propH, tamW, tamH)
+local function drawEnemys(enemys, enemyImg, tela, propW, propH, tamW, tamH)
     for _, enemy in ipairs(enemys) do
         love.graphics.setColor(255, 0, 0)
-        love.graphics.rectangle("fill",
-            ((enemy.position[1] - tela.x + math.floor(propW / 2)) * tamW) + (tamW / 4),
-            ((enemy.position[2] - tela.y + math.floor(propH / 2)) * tamH) + (tamH / 4),
-            tamW / 2,
-            tamH / 2
-        )
+
+        local tW, tH
+
+        if tamW/2 > enemyImg:getPixelWidth() then
+            tW = 1
+        else
+            tW = ((tamW/2)/enemyImg:getPixelWidth())
+        end
+
+        if tamH/2 > enemyImg:getPixelHeight() then
+            tH = 1
+        else
+            tH = ((tamH/2)/enemyImg:getPixelHeight())
+        end
+
+        if tW < tH then
+            tH = tW
+        else
+            tW = tH
+        end
+
+        love.graphics.draw(enemyImg, ((enemy.position[1] - tela.x + math.floor(propW / 2)) * tamW) + (tamW / 4), ((enemy.position[2] - tela.y + math.floor(propH / 2)) * tamH) + (tamH / 4), 0, tW, tH)
+
+        -- love.graphics.rectangle("fill",
+        --     ((enemy.position[1] - tela.x + math.floor(propW / 2)) * tamW) + (tamW / 4),
+        --     ((enemy.position[2] - tela.y + math.floor(propH / 2)) * tamH) + (tamH / 4),
+        --     tamW / 2,
+        --     tamH / 2
+        -- )
 
         love.graphics.setColor(1, 0.2, 0.2)
 
