@@ -163,7 +163,16 @@ local function drawAR(WIDTH, HEIGHT, propW, propH)
     love.graphics.rectangle("fill", ((WIDTH/propW)/2), ((HEIGHT/propH)/2), (WIDTH-(WIDTH/propW)), (HEIGHT-(HEIGHT/propH)))
 end
 
+local function drawMenu(menu)
+    love.graphics.draw(menu.capa, 0, 0)
+
+    love.graphics.draw(menu.start.img, menu.start.x, menu.start.y)
+
+    love.graphics.draw(menu.quit.img, menu.quit.x, menu.quit.y)
+end
+
 return {
+    drawMenu = drawMenu,
     drawMap = drawMap,
     drawTotems = drawTotems,
     drawEnemys = drawEnemys,

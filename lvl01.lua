@@ -23,35 +23,37 @@ local minigameType = {
     }
 }
 
-local map = {{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            { 0,  1,  1,  1,  1,  1,  1,  1,  1,  1, 0 },
-            { 0,  2,  2,  2,  2,  2,  2,  2,  2,  1, 0 },
-            { 0,  2,  1,  2,  1,  2,  1,  1,  2,  1, 0 },
-            { 0,  2,  1,  2,  1,  2,  2,  2,  2,  1, 0 },
-            { 0,  2,  1,  2,  1,  2,  1,  1,  2,  1, 0 },
-            { 0,  2,  1,  2,  1,  2,  1,  1,  2,  1, 0 },
-            { 0,  2,  1,  2,  1,  2,  1,  1,  2,  1, 0 },
-            { 0,  2,  1,  2,  2,  2,  2,  2,  2,  2, 0 },
-            { 0,  2,  2,  2,  1,  1,  1,  1,  1,  1, 0 },
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }}
+local map = {
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,1,1,1,1,1,1,2,2,2,2,2,2,2,2,1,0},
+    {0,2,2,2,2,2,2,2,1,1,2,1,1,1,2,1,0},
+    {0,1,2,1,1,2,1,2,1,1,2,1,1,1,2,1,0},
+    {0,2,2,1,1,2,1,2,2,2,2,2,2,2,2,2,0},
+    {0,1,2,2,2,2,1,1,1,2,1,1,2,1,1,1,0},
+    {0,1,1,1,1,2,1,1,1,2,2,2,2,1,1,1,0},
+    {0,1,1,1,1,2,2,2,2,2,1,1,2,1,1,1,0},
+    {0,2,2,2,2,2,1,1,1,2,1,1,2,2,2,2,0},
+    {0,1,2,1,2,2,2,2,2,2,2,2,2,1,1,1,0},
+    {0,1,2,1,2,1,1,2,1,1,1,2,1,1,1,1,0},
+    {0,1,1,1,2,1,1,2,1,1,1,2,1,1,1,1,0},
+    {0,1,1,1,2,2,2,2,2,2,2,2,1,2,2,2,0},
+    {0,1,1,1,2,1,1,1,2,1,1,2,1,2,1,1,0},
+    {0,2,2,1,2,1,1,1,2,1,1,2,2,2,2,1,0},
+    {0,1,2,2,2,1,1,2,2,1,1,2,1,2,1,1,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+}
 
-local player = constructors.newPlayer(6, 3, 0, 0)
+local player = constructors.newPlayer(2, 3, 0, 0)
 
 local enemys = {}
 
 local totems = {}
 
-table.insert(enemys, constructors.newEnemy(2,3,0,0, "right"))
-table.insert(enemys, constructors.newEnemy(4,4,0,0, "down"))
+table.insert(enemys, constructors.newEnemy(10,2,0,0, "left"))
+table.insert(enemys, constructors.newEnemy(3,10,0,0, "down"))
+table.insert(enemys, constructors.newEnemy(15,9,0,0, "left"))
 
-local aux = {
-    typeName = "Decodificar Tabelas",
-    imgs = {"a.png", "b.png"},
-    answers = {"Nome", "CPF"}
-}
-
--- table.insert(totems, constructors.newTotem(10, 9, aux))
-
+local aux
 
 aux = nil
 
@@ -65,8 +67,10 @@ aux = {
     answers = {"Nome coluna 01", "Nome coluna 02", "Nome coluna 03"},
     correctAnswers = {false, false, false}
 }
-
-table.insert(totems, constructors.newTotem(9, 9, aux))
+table.insert(totems, constructors.newTotem(2, 9, aux))
+table.insert(totems, constructors.newTotem(8, 16, aux))
+table.insert(totems, constructors.newTotem(16, 5, aux))
+table.insert(totems, constructors.newTotem(16,13, aux))
 
 local function Game()
     return map, player, enemys, totems
