@@ -2,7 +2,7 @@ local function newPlayer(x, y, vx, vy)
     return {
         position = {x, y},
         velx = vx,
-        vely = vy
+        vely = vy,
     }
 end
 
@@ -26,5 +26,5 @@ end
 return {
     newPlayer = newPlayer,
     newEnemy = newEnemy,
-    newTotem = newTotem
+    newTotem = newTotem,
 }

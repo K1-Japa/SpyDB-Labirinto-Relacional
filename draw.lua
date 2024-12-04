@@ -85,14 +85,37 @@ local function drawEnemys(enemys, tela, propW, propH, tamW, tamH)
     end
 end
 
-local function drawPlayer(player, tela, propW, propH, tamW, tamH)
+local function drawPlayer(player, playerImg, tela, propW, propH, tamW, tamH)
     love.graphics.setColor(255, 255, 0)
-    love.graphics.rectangle("fill",
-        ((player.position[1] - tela.x + math.floor(propW / 2)) * tamW) + (tamW / 4),
-        ((player.position[2] - tela.y + math.floor(propH / 2)) * tamH) + (tamH / 4),
-        tamW / 2,
-        tamH / 2
-    )
+
+    local tW, tH
+
+    if tamW/2 > playerImg:getPixelWidth() then
+        tW = 1
+    else
+        tW = ((tamW/2)/playerImg:getPixelWidth())
+    end
+
+    if tamH/2 > playerImg:getPixelHeight() then
+        tH = 1
+    else
+        tH = ((tamH/2)/playerImg:getPixelHeight())
+    end
+
+    if tW < tH then
+        tH = tW
+    else
+        tW = tH
+    end
+
+    love.graphics.draw(playerImg, ((player.position[1] - tela.x + math.floor(propW / 2)) * tamW) + (tamW / 4), ((player.position[2] - tela.y + math.floor(propH / 2)) * tamH) + (tamH / 4), 0, tW, tH)
+
+    -- love.graphics.rectangle("fill", 
+    --     ((player.position[1] - tela.x + math.floor(propW / 2)) * tamW) + (tamW / 4),
+    --     ((player.position[2] - tela.y + math.floor(propH / 2)) * tamH) + (tamH / 4),
+    --     tamW / 2,
+    --     tamH / 2
+    -- )
     
 end
 

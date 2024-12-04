@@ -45,12 +45,22 @@ local propH = 7
 local tamW = WIDTH / propW
 local tamH = HEIGHT / propH
 
+local function loadImage (path)
+	local info = love.filesystem.getInfo( path )
+	if info then
+		return love.graphics.newImage( path )
+	end
+end
+
 function love.load()
     love.window.setMode(WIDTH, HEIGHT)
 
     -- enable key repeat so backspace can be held down to trigger love.keypressed multiple times.
     love.keyboard.setKeyRepeat(true)
+
 end
+
+local playerImg = loadImage("imgs/player.png")
 
 local map, player, enemys, totems = lvl01.Game()
 
@@ -123,7 +133,7 @@ function love.draw()
 
     draw.drawEnemys(enemys, tela, propW, propH, tamW, tamH)
 
-    draw.drawPlayer(player, tela, propW, propH, tamW, tamH)
+    draw.drawPlayer(player, playerImg, tela, propW, propH, tamW, tamH)
 
     if substate == minigameType.DTB then
         draw.drawDTB(WIDTH, HEIGHT, propW, propH, text)
