@@ -18,7 +18,8 @@ local minigameType = {
             Codificado = {"./imgs/lvl01/cCol01.png", "./imgs/lvl01/cCol02.png", "./imgs/lvl01/cCol03.png"},
             Decodificado = {"./imgs/lvl01/dCol01.png", "./imgs/lvl01/dCol02.png", "./imgs/lvl01/dCol03.png"},
         },
-        answers = {"Nome coluna 01", "Nome coluna 02", "Nome coluna 03"}
+        answers = {"Nome coluna 01", "Nome coluna 02", "Nome coluna 03"},
+        correctAnswers = {false, false, false}
     }
 }
 
@@ -61,7 +62,8 @@ aux = {
             Codificado = {"./imgs/lvl01/cCol01.png", "./imgs/lvl01/cCol02.png", "./imgs/lvl01/cCol03.png"},
             Decodificado = {"./imgs/lvl01/dCol01.png", "./imgs/lvl01/dCol02.png", "./imgs/lvl01/dCol03.png"},
         },
-    answers = {"Nome coluna 01", "Nome coluna 02", "Nome coluna 03"}
+    answers = {"Nome coluna 01", "Nome coluna 02", "Nome coluna 03"},
+    correctAnswers = {false, false, false}
 }
 
 table.insert(totems, constructors.newTotem(9, 9, aux))

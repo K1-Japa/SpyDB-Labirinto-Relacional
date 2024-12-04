@@ -47,7 +47,7 @@ local function DTB(isDown, currentMinigame, substate, lifes, text)
             local flag = false
             for index, answer in ipairs(currentMinigame.tipo.answers) do
                 if string.upper(answer) == string.upper(string.gsub(text, "^%s*(.-)%s*$", "%1")) then
-                    print(index)
+                    currentMinigame.tipo.correctAnswers[index] = true
                     flag = true
                 end
             end
