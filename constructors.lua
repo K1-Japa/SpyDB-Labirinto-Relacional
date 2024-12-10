@@ -3,6 +3,7 @@ local function newPlayer(x, y, vx, vy)
         position = {x, y},
         velx = vx,
         vely = vy,
+        flags = 0
     }
 end
 

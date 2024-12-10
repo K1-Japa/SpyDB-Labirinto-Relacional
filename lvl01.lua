@@ -4,6 +4,7 @@ local minigameType = {
     DER = {
         typeName = "Diagrama Entidade Relacionamento",
         img = {"01.png", "02.png", "03.png", "04.png"},
+        diagram = 1,
         answer = nil
     },
     AR = {
@@ -58,14 +59,10 @@ local aux
 aux = nil
 
 aux = {
-    typeName = "Decodificar Tabelas",
-    imgs = {
-            Nome = "Nome.png",
-            Codificado = {"./imgs/lvl01/cCol01.png", "./imgs/lvl01/cCol02.png", "./imgs/lvl01/cCol03.png"},
-            Decodificado = {"./imgs/lvl01/dCol01.png", "./imgs/lvl01/dCol02.png", "./imgs/lvl01/dCol03.png"},
-        },
-    answers = {"Nome coluna 01", "Nome coluna 02", "Nome coluna 03"},
-    correctAnswers = {false, false, false}
+    typeName = "Diagrama Entidade Relacionamento",
+    img = {"imgs/lvl01/lvl01R.png", "imgs/lvl01/lvl01Erro01.png", "imgs/lvl01/lvl01Erro02.png", "imgs/lvl01/lvl01Erro03.png"},
+    diagram = 1,
+    answer = 1
 }
 table.insert(totems, constructors.newTotem(2, 9, aux))
 table.insert(totems, constructors.newTotem(8, 16, aux))

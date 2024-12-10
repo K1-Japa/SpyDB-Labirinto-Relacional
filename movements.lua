@@ -1,4 +1,4 @@
-local function keyboardInput(player, totems, isDown, substate, currentTotem, lifes, text)
+local function keyboardInput(player, totems, isDown, substate, currentTotem, lifes, text, lvl)
     if substate == "Play" then
         if love.keyboard.isDown("w", "up") then
             if not isDown then
@@ -20,12 +20,28 @@ local function keyboardInput(player, totems, isDown, substate, currentTotem, lif
                 player.velx = 1
                 isDown = true
             end
+        elseif love.keyboard.isDown("i") then
+            if not isDown then
+                if lvl ~= "tutorial" then
+                    substate = "instrucao"
+                end
+            end
         elseif love.keyboard.isDown("space") then
             if not isDown then
                 for _, totem in ipairs(totems) do
                     if player.position[1] == totem.position[1] and player.position[2] == totem.position[2] then
                         lifes = 3
                         substate = totem.tipo.typeName
+
+                        if substate == "Exit" and player.flags == #totems-1 then
+                            if lvl == "tutorial" then
+                                lvl = "lvl01"
+                                substate = "Play"
+                            end
+                        elseif substate == "Decodificar Tabelas" and player.flags == 0 then
+                            substate = "Play"
+                        end
+
                         currentTotem = totem
                         text = ""
                     end
@@ -46,7 +62,7 @@ local function keyboardInput(player, totems, isDown, substate, currentTotem, lif
         end
     end
 
-    return isDown, substate, currentTotem, lifes, text
+    return isDown, substate, currentTotem, lifes, text, lvl
 end
 
 local function playerNewPosition(player)

@@ -1,4 +1,4 @@
-local function DER(isDown, currentMinigame, substate, lifes)
+local function DER(player, isDown, currentMinigame, substate, lifes)
     if love.keyboard.isDown("a", "left") then
         if not isDown then
             if currentMinigame.tipo.diagram > 1 then
@@ -8,14 +8,20 @@ local function DER(isDown, currentMinigame, substate, lifes)
         end
     elseif love.keyboard.isDown("d", "right") then
         if not isDown then
-            if currentMinigame.tipo.diagram < 4 then
+            if currentMinigame.tipo.diagram < #currentMinigame.tipo.img then
                 currentMinigame.tipo.diagram = currentMinigame.tipo.diagram + 1
             end
+            isDown = true
+        end
+    elseif love.keyboard.isDown("h") then
+        if not isDown then
+            
             isDown = true
         end
     elseif love.keyboard.isDown("return") then
         if not isDown then
             if currentMinigame.tipo.diagram == currentMinigame.tipo.answer then
+                player.flags = 1
                 substate = "Play"
             else
                 if lifes > 1 then
@@ -30,16 +36,23 @@ local function DER(isDown, currentMinigame, substate, lifes)
         isDown = false
     end
 
-    return isDown, substate, lifes
+    return player, isDown, substate, lifes
 
 end
 
-local function DTB(isDown, currentMinigame, substate, lifes, text)
+local function DTB(player, isDown, currentMinigame, substate, lifes, text, seeDER)
     if love.keyboard.isDown("tab") then
         if not isDown then
-            if currentMinigame.tipo.diagram > 1 then
-                currentMinigame.tipo.diagram = currentMinigame.tipo.diagram - 1
+            if seeDER[1] == false then
+                seeDER[1] = true
+            else
+                seeDER[1] = false
             end
+            isDown = true
+        end
+    elseif love.keyboard.isDown("h") then
+        if not isDown then
+            
             isDown = true
         end
     elseif love.keyboard.isDown("return") then
@@ -49,6 +62,7 @@ local function DTB(isDown, currentMinigame, substate, lifes, text)
                 if string.upper(answer) == string.upper(string.gsub(text, "^%s*(.-)%s*$", "%1")) then
                     currentMinigame.tipo.correctAnswers[index] = true
                     flag = true
+                    text = ""
                 end
             end
 
@@ -59,8 +73,19 @@ local function DTB(isDown, currentMinigame, substate, lifes, text)
                     love.event.quit()
                 end
             else
-                text = ""
-                substate = "Play"
+                flag = true
+
+                for _, answers in ipairs(currentMinigame.tipo.correctAnswers) do
+                    if answers == false then
+                        flag = false
+                    end
+                end
+
+                if flag == true then
+                    player.flags = player.flags + 1
+                    text = ""
+                    substate = "Play"
+                end
             end
         end
             isDown = true
@@ -68,7 +93,7 @@ local function DTB(isDown, currentMinigame, substate, lifes, text)
         isDown = false
     end
 
-    return isDown, substate, lifes, text
+    return player, isDown, substate, lifes, text, seeDER
 end
 
 return {
