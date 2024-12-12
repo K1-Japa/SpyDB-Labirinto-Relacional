@@ -35,6 +35,8 @@ local function keyboardInput(player, totems, isDown, substate, currentTotem, tex
                             if lvl == "tutorialRun" then
                                 lvl = "lvl01"
                                 substate = "Play"
+                            elseif lvl =="lvl01Run" then
+                                love.event.quit()
                             end
                         elseif substate == "Decodificar Tabelas" and player.flags == 0 then
                             substate = "Play"
