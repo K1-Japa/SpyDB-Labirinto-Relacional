@@ -98,7 +98,8 @@ local aux = {
     typeName = minigameType.DER,
     img = {},
     diagram = 1,
-    answer = 1
+    answer = 1,
+    completed = false
 }
 
 local a = nil
@@ -119,8 +120,9 @@ aux = {
         Codificado = {},
         Decodificado = {}
     },
-    answers = {"id_contata", "cpf_proprietario", "cpf_corretor"},
-    correctAnswers = {false, false, false}
+    answers = {"id", "cpf_proprietario", "cpf_corretor"},
+    correctAnswers = {false, false, false},
+    completed = false
 }
 
 a = loadImage("imgs/lvl01/lvl01TabelaTitulo.png")
@@ -156,7 +158,8 @@ aux = {
         Decodificado = {}
     },
     answers = {"cpf", "nome", "contato", "id_imovel"},
-    correctAnswers = {false, false, false, false}
+    correctAnswers = {false, false, false, false},
+    completed = false
 }
 
 a = loadImage("imgs/lvl01/lvl01TabelaTitulo02.png")
@@ -217,7 +220,8 @@ aux = {
     typeName = minigameType.DER,
     img = {},
     diagram = 1,
-    answer = 2
+    answer = 2,
+    completed = false
 }
 
 a = nil
@@ -239,7 +243,8 @@ aux = {
         Decodificado = {}
     },
     answers = {"id", "nome", "cpf_funcionario"},
-    correctAnswers = {false, false, false}
+    correctAnswers = {false, false, false},
+    completed = false
 }
 
 a = loadImage("imgs/tutorial/tutorialTabelaTitulo.png")
@@ -323,6 +328,22 @@ menuGraphics.quit.y = (HEIGHT/2)+(2*(menuGraphics.quit.img:getPixelHeight()/2))
 menuGraphics.quit.width = menuGraphics.quit.img:getPixelWidth()
 menuGraphics.quit.height = menuGraphics.quit.img:getPixelHeight()
 
+local GameOver = {
+    capa = loadImage("imgs/GameOver.png"),
+    continuar = {
+        img = loadImage("imgs/continuar.png"),
+        x = nil,
+        y = nil,
+        width = nil,
+        height = nil
+    }
+}
+
+GameOver.continuar.x = (WIDTH/2)-(GameOver.continuar.img:getPixelWidth()/2)
+GameOver.continuar.y = (HEIGHT/2)-(GameOver.continuar.img:getPixelHeight()/4)
+GameOver.continuar.width = GameOver.continuar.img:getPixelWidth()
+GameOver.continuar.height = GameOver.continuar.img:getPixelHeight()
+
 local tela = screen.set(player, propW, propH)
 
 local isDown = false
@@ -336,8 +357,69 @@ local substate = "Play"
 local currentTotem = nil
 local lifes = nil
 local lvl = "tutorial"
+local lifesTxt = ""
 local seeDER = {false, tutorial.totems[1].tipo.img[tutorial.totems[1].tipo.answer]}
-local instrucao = loadImage("imgs/lvl01/lvl01Instrucao.png")
+local instrucao = loadImage("imgs/tutorial/I1.png")
+local playerStart = nil
+local enemysStart = nil
+local inst = loadImage("imgs/inst.png")
+local flag = false
+
+local function tutorialSet(map, tutorial, player, playerStart, enemys, enemysStart, totems, seeDER, substate, lvl)
+    map = tutorial.map
+    player = tutorial.player
+    playerStart = {
+        tutorial.player.position[1],
+        tutorial.player.position[2]
+    }
+    enemys = tutorial.enemys
+    enemysStart = {}
+
+    for _, value in ipairs(tutorial.enemys) do
+        table.insert(enemysStart, {
+            position = {value.position[1], value.position[2]},
+            look = value.look,
+            lastPosition = {value.position[1], value.position[2], value.look}
+        })
+    end
+    totems = tutorial.totems
+    seeDER = {false, tutorial.totems[1].tipo.img[tutorial.totems[1].tipo.answer]}
+    substate = "instrucao"
+    lvl = "tutorialRun"
+
+    return map, tutorial, player, playerStart, enemys, enemysStart, totems, seeDER, substate, lvl
+
+end
+
+local function lvl01Set(pmap, plvl01, pplayer, pplayerStart, penemys, penemysStart, ptotems, pseeDER, psubstate, plvl, pinstrucao)
+    pmap = plvl01.map
+    pplayer.position[1] = plvl01.player.position[1]
+    pplayer.position[2] = plvl01.player.position[2]
+    pplayer.flags = plvl01.player.flags
+    pplayer = plvl01.player
+    pplayer = plvl01.player
+    pplayerStart = {
+        plvl01.player.position[1],
+        plvl01.player.position[2]
+    }
+    penemys = plvl01.enemys
+    penemysStart = {}
+
+    for _, value in ipairs(plvl01.enemys) do
+        table.insert(penemysStart, {
+            position = {value.position[1], value.position[2]},
+            look = value.look,
+            lastPosition = {value.position[1], value.position[2], value.look}
+        })
+    end
+    ptotems = plvl01.totems
+    pseeDER = {false, plvl01.totems[1].tipo.img[plvl01.totems[1].tipo.answer]}
+    psubstate = "instrucao"
+    plvl = "lvl01Run"
+    pinstrucao = loadImage("imgs/lvl01/IG.png")
+
+    return pmap, plvl01, pplayer, pplayerStart, penemys, penemysStart, ptotems, pseeDER, psubstate, plvl, pinstrucao, flag
+end
 
 function love.update(dt)
 
@@ -346,9 +428,17 @@ function love.update(dt)
         function love.mousepressed(mx, my, mbutton)
             if mbutton == 1 and mx >= menuGraphics.start.x and mx < menuGraphics.start.x + menuGraphics.start.width and my >= menuGraphics.start.y and my < menuGraphics.start.y + menuGraphics.start.height then
                 state = "inGame"
+                lifes = 3
             end
     
             if mbutton == 1 and mx >= menuGraphics.quit.x and mx < menuGraphics.quit.x + menuGraphics.quit.width and my >= menuGraphics.quit.y and my < menuGraphics.quit.y + menuGraphics.quit.height then
+                love.event.quit()
+            end
+        end
+
+    elseif state == "GameOver" then
+        function love.mousepressed(mx, my, mbutton)
+            if mbutton == 1 and mx >= GameOver.continuar.x and mx < GameOver.continuar.x + GameOver.continuar.width and my >= GameOver.continuar.y and my < GameOver.continuar.y + GameOver.continuar.height then
                 love.event.quit()
             end
         end
@@ -357,19 +447,37 @@ function love.update(dt)
 
         tempoAcumulado = tempoAcumulado + dt
 
-        if lvl == "lvl01" then
-            map = lvl01.map
-            player = lvl01.player
-            enemys = lvl01.enemys
-            totems = lvl01.totems
-            seeDER = {false, lvl01.totems[1].tipo.img[lvl01.totems[1].tipo.answer]}
-            substate = "instrucao"
-            lvl = "a"
+        if lvl == "tutorial" then
+            map, tutorial, player, playerStart, enemys, enemysStart, totems, seeDER, substate, lvl = tutorialSet(map, tutorial, player, playerStart, enemys, enemysStart, totems, seeDER, substate, lvl)
+        elseif lvl == "lvl01" then
+            map, lvl01, player, playerStart, enemys, enemysStart, totems, seeDER, substate, lvl, instrucao, flag = lvl01Set(map, lvl01, player, playerStart, enemys, enemysStart, totems, seeDER, substate, lvl, instrucao)
         end
 
-        isDown, substate, currentTotem, lifes, text, lvl = movement.keyboardInput(player, totems, isDown, substate, currentTotem, lifes, text, lvl)
+        if lvl == "tutorialRun" then
+            if player.flags == 0 and substate == minigameType.DER then
+                instrucao = loadImage("imgs/tutorial/I1_1.png")
+            elseif player.flags == 1 then
+                if substate == minigameType.DTB then
+                    instrucao = loadImage("imgs/tutorial/I2_1.png")
+                else
+                    instrucao = loadImage("imgs/tutorial/I2.png")
+                end
+            elseif player.flags >= 1 then
+                instrucao = loadImage("imgs/tutorial/I3.png")
+            end
+        else
+            if flag == true then
+                instrucao = loadImage("imgs/lvl01/lvl01Instrucao.png")
+            end
+        end
+    
+        if lifes ~= nil then
+            lifesTxt = "Vidas restantes: " .. lifes
+        end
 
-        colision.enemyLook(player, enemys)
+        isDown, substate, currentTotem, text, lvl, flag = movement.keyboardInput(player, totems, isDown, substate, currentTotem, text, lvl, flag)
+
+        lifes, state, player, enemys, lvl = colision.enemyLook(player, enemys, lifes, state, playerStart, enemysStart, lvl)
 
         contador, tempoAcumulado = movement.enemyMovement(contador, tempoAcumulado, enemys, constructors, map)
 
@@ -378,9 +486,9 @@ function love.update(dt)
         movement.playerNewPosition(player)
 
         if substate == minigameType.DER then
-            player, minigameIsDown, substate, lifes = minigame.DER(player, minigameIsDown, currentTotem, substate, lifes)
+            player, minigameIsDown, substate, lifes, lvl = minigame.DER(player, minigameIsDown, currentTotem, substate, lifes, lvl)
         elseif substate == minigameType.DTB then
-            player, minigameIsDown, substate, lifes, text, seeDER = minigame.DTB(player, minigameIsDown, currentTotem, substate, lifes, text, seeDER)
+            player, minigameIsDown, substate, lifes, text, seeDER, lvl = minigame.DTB(player, minigameIsDown, currentTotem, substate, lifes, text, seeDER, lvl)
         end
 
         local rangeX = {
@@ -427,35 +535,34 @@ function love.draw()
 
         if substate == minigameType.DTB then
             draw.drawDTB(WIDTH, HEIGHT, propW, propH, text, currentTotem, seeDER)
-            if lvl == "tutorial" then
+            if lvl == "tutorialRun" then
                 love.graphics.setColor(255,255,255)
-                love.graphics.printf("Digite os atributos da tabela. [enter]", (WIDTH*4/(propW*2)), (HEIGHT-(HEIGHT/propH))+70, (WIDTH-(WIDTH/propW)*2))
-                love.graphics.printf("(chaves estrangeiras estão na forma {atributo_entidade})", (WIDTH*2.5/(propW*2)), (HEIGHT-(HEIGHT/propH))+100, (WIDTH-(WIDTH/propW)*2))
+                love.graphics.draw(instrucao, 10, 10, 0, 0.5, 0.5)
             end
 
         elseif substate == minigameType.DER then
             draw.drawDER(WIDTH, HEIGHT, propW, propH, currentTotem, setas)
-            if lvl == "tutorial" then
+            if lvl == "tutorialRun" then
                 love.graphics.setColor(255,255,255)
-                love.graphics.printf("Selecione o DER correspondente a um departamento com muitos funcionários. [enter]", (WIDTH/propW), (HEIGHT-(HEIGHT/propH)), (WIDTH-(WIDTH/propW)*2))
+                love.graphics.draw(instrucao, 10, 10, 0, 0.5, 0.5)
             end
 
         elseif substate == minigameType.AR then
             draw.drawAR(WIDTH, HEIGHT, propW, propH)
         elseif substate == "instrucao" then
             love.graphics.draw(instrucao, (WIDTH*1.5/propW)+30, HEIGHT/(propH*2))
+            love.graphics.setColor(255,255,255)
+            love.graphics.draw(inst, ((WIDTH*1.5/propW)+30)+instrucao:getPixelWidth()-((inst:getPixelWidth()/2)*0.4), (HEIGHT/(propH*2))-((inst:getPixelHeight()/2)*0.4), 0, 0.4,0.4)
         else
-            if lvl == "tutorial" then
-                love.graphics.setColor(255,255,255)
-                if player.flags == 0 then
-                    love.graphics.printf("Ande até o quadrado para interagir com o 1° minigame. [space]", (WIDTH*1.5/propW), (HEIGHT-(HEIGHT/propH)), (WIDTH-(WIDTH/propW)*2))
-                elseif player.flags == 1 then
-                    love.graphics.printf("Ande até o triângulo para interagir com o 2° minigame.\n(Só é possível interagir com um minigame do tipo triângulo\n após interagir com um do tipo quadrado antes).", (WIDTH*1.5/propW), (HEIGHT-(HEIGHT/propH)), (WIDTH-(WIDTH/propW)*2))
-                elseif player.flags == 2 then
-                    love.graphics.printf("Ande até o círculo para avançar de fase.\n(Só é possível avançar de fase após concluir todos os minigames da fase atual).", (WIDTH*1.5/propW), (HEIGHT-(HEIGHT/propH)), (WIDTH-(WIDTH/propW)*2))
-                end
-            end
+            love.graphics.setColor(255,0,0)
+            love.graphics.printf(lifesTxt, 8, 10, (WIDTH-(WIDTH/propW)*2))
         end
-        
+
+    elseif state == "GameOver" then
+        love.graphics.setColor(255,255,255)
+
+        love.graphics.draw(GameOver.capa, 0, 0)
+
+        love.graphics.draw(menuGraphics.quit.img, menuGraphics.quit.x, menuGraphics.quit.y)
     end
 end

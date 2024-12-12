@@ -1,4 +1,4 @@
-local function DER(player, isDown, currentMinigame, substate, lifes)
+local function DER(player, isDown, currentMinigame, substate, lifes, lvl)
     if love.keyboard.isDown("a", "left") then
         if not isDown then
             if currentMinigame.tipo.diagram > 1 then
@@ -13,21 +13,13 @@ local function DER(player, isDown, currentMinigame, substate, lifes)
             end
             isDown = true
         end
-    elseif love.keyboard.isDown("h") then
-        if not isDown then
-            
-            isDown = true
-        end
     elseif love.keyboard.isDown("return") then
         if not isDown then
             if currentMinigame.tipo.diagram == currentMinigame.tipo.answer then
                 player.flags = 1
-                substate = "Play"
-            else
-                if lifes > 1 then
-                    lifes = lifes - 1
-                else
-                    love.event.quit()
+                currentMinigame.tipo.completed = true
+                if lvl == "tutorialRun" then
+                    substate = "instrucao"
                 end
             end
         end
@@ -36,11 +28,11 @@ local function DER(player, isDown, currentMinigame, substate, lifes)
         isDown = false
     end
 
-    return player, isDown, substate, lifes
+    return player, isDown, substate, lifes, lvl
 
 end
 
-local function DTB(player, isDown, currentMinigame, substate, lifes, text, seeDER)
+local function DTB(player, isDown, currentMinigame, substate, lifes, text, seeDER, lvl)
     if love.keyboard.isDown("tab") then
         if not isDown then
             if seeDER[1] == false then
@@ -48,11 +40,6 @@ local function DTB(player, isDown, currentMinigame, substate, lifes, text, seeDE
             else
                 seeDER[1] = false
             end
-            isDown = true
-        end
-    elseif love.keyboard.isDown("h") then
-        if not isDown then
-            
             isDown = true
         end
     elseif love.keyboard.isDown("return") then
@@ -66,25 +53,18 @@ local function DTB(player, isDown, currentMinigame, substate, lifes, text, seeDE
                 end
             end
 
-            if flag == false then
-                if lifes > 1 then
-                    lifes = lifes - 1
-                else
-                    love.event.quit()
+            for _, answers in ipairs(currentMinigame.tipo.correctAnswers) do
+                if answers == false then
+                    flag = false
                 end
-            else
-                flag = true
+            end
 
-                for _, answers in ipairs(currentMinigame.tipo.correctAnswers) do
-                    if answers == false then
-                        flag = false
-                    end
-                end
-
-                if flag == true then
-                    player.flags = player.flags + 1
-                    text = ""
-                    substate = "Play"
+            if flag == true then
+                player.flags = player.flags + 1
+                currentMinigame.tipo.completed = true
+                text = ""
+                if lvl == "tutorialRun" then
+                    substate = "instrucao"
                 end
             end
         end
@@ -93,7 +73,7 @@ local function DTB(player, isDown, currentMinigame, substate, lifes, text, seeDE
         isDown = false
     end
 
-    return player, isDown, substate, lifes, text, seeDER
+    return player, isDown, substate, lifes, text, seeDER, lvl
 end
 
 return {

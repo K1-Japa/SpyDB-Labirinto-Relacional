@@ -210,8 +210,13 @@ local function drawDTB(WIDTH, HEIGHT, propW, propH, text, currentTotem, seeDER)
 
     end
 
-    love.graphics.setColor(0,255,0)
-    love.graphics.printf(text, (WIDTH/propW), (HEIGHT-(HEIGHT/propH)), (WIDTH-(WIDTH/propW)*2))
+    if currentTotem.tipo.completed == true then
+        love.graphics.setColor(0,255,0)
+        love.graphics.printf("Concluído!", (WIDTH/propW), (HEIGHT-(HEIGHT/propH)), (WIDTH-(WIDTH/propW)*2))
+    else
+        love.graphics.setColor(0,255,0)
+        love.graphics.printf(text, (WIDTH/propW), (HEIGHT-(HEIGHT/propH)), (WIDTH-(WIDTH/propW)*2))
+    end
 end
 
 local function drawDER(WIDTH, HEIGHT, propW, propH, currentTotem, setas)
@@ -225,6 +230,11 @@ local function drawDER(WIDTH, HEIGHT, propW, propH, currentTotem, setas)
 
     love.graphics.draw(setas.setaA, ((WIDTH/propW)/2)+20, ((HEIGHT/propH)/2)+(((HEIGHT-(HEIGHT/propH))/2))-setas.setaA:getPixelHeight()/2)
     love.graphics.draw(setas.setaD, (((WIDTH/propW)/2)+(WIDTH-(WIDTH/propW)))-setas.setaD:getPixelWidth()-20,  ((HEIGHT/propH)/2)+(((HEIGHT-(HEIGHT/propH))/2))-setas.setaD:getPixelHeight()/2)
+
+    if currentTotem.tipo.completed == true then
+        love.graphics.setColor(0,255,0)
+        love.graphics.printf("Concluído!", (WIDTH/propW), (HEIGHT-(HEIGHT/propH)), (WIDTH-(WIDTH/propW)*2))
+    end
 end
 
 local function drawAR(WIDTH, HEIGHT, propW, propH)
