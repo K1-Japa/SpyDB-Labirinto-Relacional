@@ -242,15 +242,15 @@ aux = {
         Codificado = {},
         Decodificado = {}
     },
-    answers = {"id", "nome", "cpf_funcionario"},
-    correctAnswers = {false, false, false},
+    answers = {"cpf", "nome", "salario", "id_departamento"},
+    correctAnswers = {false, false, false, false},
     completed = false
 }
 
 a = loadImage("imgs/tutorial/tutorialTabelaTitulo.png")
 aux.imgs.Titulo = a
 
-auxImg = {"imgs/tutorial/ctutorialTabelaColuna01.png", "imgs/tutorial/ctutorialTabelaColuna02.png", "imgs/tutorial/ctutorialTabelaColuna03.png"}
+auxImg = {"imgs/tutorial/ctutorialTabelaColuna01.png", "imgs/tutorial/ctutorialTabelaColuna02.png", "imgs/tutorial/ctutorialTabelaColuna03.png", "imgs/tutorial/ctutorialTabelaColuna04.png"}
 
 for _, x in ipairs(auxImg) do
 
@@ -259,7 +259,7 @@ for _, x in ipairs(auxImg) do
 
 end
 
-auxImg = {"imgs/tutorial/dtutorialTabelaColuna01.png", "imgs/tutorial/dtutorialTabelaColuna02.png", "imgs/tutorial/dtutorialTabelaColuna03.png"}
+auxImg = {"imgs/tutorial/dtutorialTabelaColuna01.png", "imgs/tutorial/dtutorialTabelaColuna02.png", "imgs/tutorial/dtutorialTabelaColuna03.png", "imgs/tutorial/dtutorialTabelaColuna04.png"}
 
 for _, x in ipairs(auxImg) do
 
@@ -343,6 +343,22 @@ GameOver.continuar.x = (WIDTH/2)-(GameOver.continuar.img:getPixelWidth()/2)
 GameOver.continuar.y = (HEIGHT/2)-(GameOver.continuar.img:getPixelHeight()/4)
 GameOver.continuar.width = GameOver.continuar.img:getPixelWidth()
 GameOver.continuar.height = GameOver.continuar.img:getPixelHeight()
+
+local End = {
+    capa = loadImage("imgs/end.png"),
+    quit = {
+        img = loadImage("imgs/endQuit.png"),
+        x = nil,
+        y = nil,
+        width = nil,
+        height = nil
+    }
+}
+
+End.quit.x = (WIDTH/2)-(End.quit.img:getPixelWidth()/2)
+End.quit.y = (HEIGHT/2)-(End.quit.img:getPixelHeight()/4)
+End.quit.width = End.quit.img:getPixelWidth()
+End.quit.height = End.quit.img:getPixelHeight()
 
 local tela = screen.set(player, propW, propH)
 
@@ -436,6 +452,12 @@ function love.update(dt)
             end
         end
 
+    elseif state == "End" then
+        function love.mousepressed(mx, my, mbutton)
+            if mbutton == 1 and mx >= End.quit.x and mx < End.quit.x + End.quit.width and my >= End.quit.y and my < End.quit.y + End.quit.height then
+                love.event.quit()
+            end
+        end
     elseif state == "GameOver" then
         function love.mousepressed(mx, my, mbutton)
             if mbutton == 1 and mx >= GameOver.continuar.x and mx < GameOver.continuar.x + GameOver.continuar.width and my >= GameOver.continuar.y and my < GameOver.continuar.y + GameOver.continuar.height then
@@ -475,7 +497,7 @@ function love.update(dt)
             lifesTxt = "Vidas restantes: " .. lifes
         end
 
-        isDown, substate, currentTotem, text, lvl, flag = movement.keyboardInput(player, totems, isDown, substate, currentTotem, text, lvl, flag)
+        isDown, substate, currentTotem, text, lvl, flag, state = movement.keyboardInput(player, totems, isDown, substate, currentTotem, text, lvl, flag, state)
 
         lifes, state, player, enemys, lvl = colision.enemyLook(player, enemys, lifes, state, playerStart, enemysStart, lvl)
 
@@ -557,6 +579,13 @@ function love.draw()
             love.graphics.setColor(255,0,0)
             love.graphics.printf(lifesTxt, 8, 10, (WIDTH-(WIDTH/propW)*2))
         end
+
+    elseif state == "End" then
+        love.graphics.setColor(255,255,255)
+
+        love.graphics.draw(End.capa, 0, 0)
+
+        love.graphics.draw(End.quit.img, End.quit.x, End.quit.y)
 
     elseif state == "GameOver" then
         love.graphics.setColor(255,255,255)

@@ -20,7 +20,6 @@ end
 local function enemyLook(player, enemys, lifes, state, playerStart, enemysStart, lvl)
     for _, enemy in ipairs(enemys) do
         if enemy.position[1] == player.position[1] and enemy.position[2] == player.position[2] then
-                print(player.position[1] .. ";" .. player.position[2] .. " -> " .. enemy.position[1] .. ";" .. enemy.position[2])
                 if lifes > 1 then
                     lifes = lifes - 1
 
@@ -46,8 +45,6 @@ local function enemyLook(player, enemys, lifes, state, playerStart, enemysStart,
                     player.position[2] = playerStart[2]
 
                     for index, _ in ipairs(enemys) do
-                        print(enemys[index].position[1] .. " - " .. enemys[index].position[2])
-                        print(enemysStart[index].position[1] .. " - " .. enemysStart[index].position[2])
                         enemys[index].position[1] = enemysStart[index].position[1]
                         enemys[index].position[2] = enemysStart[index].position[2]
                         enemys[index].look = enemysStart[index].look

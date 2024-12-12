@@ -1,4 +1,4 @@
-local function keyboardInput(player, totems, isDown, substate, currentTotem, text, lvl, flag)
+local function keyboardInput(player, totems, isDown, substate, currentTotem, text, lvl, flag, state)
     if substate == "Play" then
         if love.keyboard.isDown("w", "up") then
             if not isDown then
@@ -36,7 +36,7 @@ local function keyboardInput(player, totems, isDown, substate, currentTotem, tex
                                 lvl = "lvl01"
                                 substate = "Play"
                             elseif lvl =="lvl01Run" then
-                                love.event.quit()
+                                state = "End"
                             end
                         elseif substate == "Decodificar Tabelas" and player.flags == 0 then
                             substate = "Play"
@@ -75,7 +75,7 @@ local function keyboardInput(player, totems, isDown, substate, currentTotem, tex
         end
     end
 
-    return isDown, substate, currentTotem, text, lvl, flag
+    return isDown, substate, currentTotem, text, lvl, flag, state
 end
 
 local function playerNewPosition(player)
