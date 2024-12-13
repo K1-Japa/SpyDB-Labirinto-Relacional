@@ -381,6 +381,20 @@ local enemysStart = nil
 local inst = loadImage("imgs/inst.png")
 local flag = false
 
+local function deepCopy(original)
+    local copy
+    if type(original) == 'table' then
+        copy = {}
+        for key, value in next, original, nil do
+            copy[deepCopy(key)] = deepCopy(value)
+        end
+        setmetatable(copy, deepCopy(getmetatable(original)))
+    else -- número, string, boolean, etc.
+        copy = original
+    end
+    return copy
+end
+
 local function tutorialSet(map, tutorial, player, playerStart, enemys, enemysStart, totems, seeDER, substate, lvl)
     map = tutorial.map
     player = tutorial.player
@@ -408,28 +422,15 @@ local function tutorialSet(map, tutorial, player, playerStart, enemys, enemysSta
 end
 
 local function lvl01Set(pmap, plvl01, pplayer, pplayerStart, penemys, penemysStart, ptotems, pseeDER, psubstate, plvl, pinstrucao)
-    pmap = plvl01.map
-    pplayer.position[1] = plvl01.player.position[1]
-    pplayer.position[2] = plvl01.player.position[2]
-    pplayer.flags = plvl01.player.flags
-    pplayer = plvl01.player
-    pplayer = plvl01.player
-    pplayerStart = {
-        plvl01.player.position[1],
-        plvl01.player.position[2]
-    }
-    penemys = plvl01.enemys
-    penemysStart = {}
-
-    for _, value in ipairs(plvl01.enemys) do
-        table.insert(penemysStart, {
-            position = {value.position[1], value.position[2]},
-            look = value.look,
-            lastPosition = {value.position[1], value.position[2], value.look}
-        })
-    end
-    ptotems = plvl01.totems
-    pseeDER = {false, plvl01.totems[1].tipo.img[plvl01.totems[1].tipo.answer]}
+    pmap = deepCopy(plvl01.map)
+    pplayer.position = deepCopy(plvl01.player.position)
+    pplayer.flags = deepCopy(plvl01.player.flags)
+    pplayer = deepCopy(plvl01.player)
+    pplayerStart = deepCopy(plvl01.player.position)
+    penemys = deepCopy(plvl01.enemys)
+    penemysStart = deepCopy(plvl01.enemys)
+    ptotems = deepCopy(plvl01.totems)
+    pseeDER = {false, deepCopy(plvl01.totems[1].tipo.img[plvl01.totems[1].tipo.answer])}
     psubstate = "instrucao"
     plvl = "lvl01Run"
     pinstrucao = loadImage("imgs/lvl01/IG.png")
@@ -461,7 +462,8 @@ function love.update(dt)
     elseif state == "GameOver" then
         function love.mousepressed(mx, my, mbutton)
             if mbutton == 1 and mx >= GameOver.continuar.x and mx < GameOver.continuar.x + GameOver.continuar.width and my >= GameOver.continuar.y and my < GameOver.continuar.y + GameOver.continuar.height then
-                love.event.quit()
+                state = "inGame"
+                lvl = "lvl01"
             end
         end
 
@@ -592,6 +594,6 @@ function love.draw()
 
         love.graphics.draw(GameOver.capa, 0, 0)
 
-        love.graphics.draw(menuGraphics.quit.img, menuGraphics.quit.x, menuGraphics.quit.y)
+        love.graphics.draw(GameOver.continuar.img, GameOver.continuar.x, GameOver.continuar.y)
     end
 end

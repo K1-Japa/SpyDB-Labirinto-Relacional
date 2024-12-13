@@ -213,6 +213,8 @@ local function drawDTB(WIDTH, HEIGHT, propW, propH, text, currentTotem, seeDER)
     if currentTotem.tipo.completed == true then
         love.graphics.setColor(0,255,0)
         love.graphics.printf("Concluído!", (WIDTH/propW), (HEIGHT-(HEIGHT/propH)), (WIDTH-(WIDTH/propW)*2))
+        love.graphics.setColor(0,0,0)
+        love.graphics.printf("Aperte 'esc' para fechar o minigame", (WIDTH/propW)+160, (HEIGHT-(HEIGHT/propH)), (WIDTH-(WIDTH/propW)*2))
     else
         love.graphics.setColor(0,255,0)
         love.graphics.printf(text, (WIDTH/propW), (HEIGHT-(HEIGHT/propH)), (WIDTH-(WIDTH/propW)*2))
@@ -234,6 +236,8 @@ local function drawDER(WIDTH, HEIGHT, propW, propH, currentTotem, setas)
     if currentTotem.tipo.completed == true then
         love.graphics.setColor(0,255,0)
         love.graphics.printf("Concluído!", (WIDTH/propW), (HEIGHT-(HEIGHT/propH)), (WIDTH-(WIDTH/propW)*2))
+        love.graphics.setColor(0,0,0)
+        love.graphics.printf("Aperte 'esc' para fechar o minigame", (WIDTH/propW)+160, (HEIGHT-(HEIGHT/propH)), (WIDTH-(WIDTH/propW)*2))
     end
 end
 
