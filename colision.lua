@@ -34,7 +34,6 @@ local function enemyLook(player, enemys, lifes, state, playerStart, enemysStart,
                     end
                 else
                     state = "GameOver"
-                    lvl = "lvl01"
                 end
         elseif enemy.look == "up" then
             if enemy.position[1] == player.position[1] and (enemy.position[2] - 1) == player.position[2] then
@@ -52,7 +51,6 @@ local function enemyLook(player, enemys, lifes, state, playerStart, enemysStart,
                     end
                 else
                     state = "GameOver"
-                    lvl = "lvl01"
                 end
             end
         elseif enemy.look == "down" then
@@ -72,7 +70,6 @@ local function enemyLook(player, enemys, lifes, state, playerStart, enemysStart,
                     end
                 else
                     state = "GameOver"
-                    lvl = "lvl01"
                 end
             end
         elseif enemy.look == "left" then
@@ -91,7 +88,6 @@ local function enemyLook(player, enemys, lifes, state, playerStart, enemysStart,
                     end
                 else
                     state = "GameOver"
-                    lvl = "lvl01"
                 end
             end
         elseif enemy.look == "right" then
@@ -110,7 +106,6 @@ local function enemyLook(player, enemys, lifes, state, playerStart, enemysStart,
                     end
                 else
                     state = "GameOver"
-                    lvl = "lvl01"
                 end
             end
         end

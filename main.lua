@@ -6,8 +6,6 @@ local screen = require("screen")
 local draw = require("draw")
 local utf8 = require("utf8")
 local minigame = require("minigame")
--- local lvl01 = require("lvl01")
-local lvl02 = require("lvl02")
 
 local text = ""
 
@@ -191,6 +189,225 @@ aux = {
 
 table.insert(lvl01.totems, constructors.newTotem(16, 13, aux))
 
+--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+local lvl02 = {
+    map = {
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 1, 1, 2, 1, 2, 1, 1, 2, 2, 1, 1, 2, 2, 2, 1, 0},
+        {0, 1, 2, 2, 2, 2, 1, 1, 2, 1, 1, 1, 2, 1, 2, 2, 0},
+        {0, 1, 1, 2, 1, 2, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 0},
+        {0, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 0},
+        {0, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 0},
+        {0, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 2, 1, 0},
+        {0, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 0},
+        {0, 2, 2, 2, 2, 1, 1, 2, 1, 1, 1, 2, 2, 2, 2, 2, 0},
+        {0, 1, 1, 1, 2, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 0},
+        {0, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 2, 1, 1, 1, 1, 0},
+        {0, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 2, 2, 2, 2, 1, 0},
+        {0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 1, 2, 2, 0},
+        {0, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 2, 1, 1, 2, 1, 0},
+        {0, 1, 2, 1, 1, 1, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 0},
+        {0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+
+    },
+
+    player = nil,
+
+    enemys = {},
+
+    totems = {},
+
+    exit = {2, 5, false}
+
+}
+
+lvl02.player = constructors.newPlayer(16, 13, 0, 0)
+
+table.insert(lvl02.enemys, constructors.newEnemy(2,9,0,0, "left"))
+table.insert(lvl02.enemys, constructors.newEnemy(9,2,0,0, "down"))
+table.insert(lvl02.enemys, constructors.newEnemy(15,9,0,0, "left"))
+
+auxImg = {"imgs/lvl02/lvl02Erro01.png", "imgs/lvl02/lvl02R.png", "imgs/lvl02/lvl02Erro02.png"}
+
+aux = {
+    typeName = minigameType.DER,
+    img = {},
+    diagram = 1,
+    answer = 2,
+    completed = false
+}
+
+a = nil
+
+for _, x in ipairs(auxImg) do
+
+    a = loadImage(x)
+    table.insert(aux.img, a)
+
+end
+
+table.insert(lvl02.totems, constructors.newTotem(16, 15, aux))
+
+aux = {
+    typeName = minigameType.DTB,
+    imgs = {
+        Titulo = nil,
+        Codificado = {},
+        Decodificado = {}
+    },
+    answers = {"id", "titulo", "autor", "categoria"},
+    correctAnswers = {false, false, false, false},
+    completed = false
+}
+
+a = loadImage("imgs/lvl02/lvl02TabelaTitulo01.png")
+aux.imgs.Titulo = a
+
+auxImg = {"imgs/lvl02/clvl02TabelaColuna01.png", "imgs/lvl02/clvl02TabelaColuna02.png", "imgs/lvl02/clvl02TabelaColuna03.png", "imgs/lvl02/clvl02TabelaColuna04.png"}
+
+for _, x in ipairs(auxImg) do
+
+    a = loadImage(x)
+    table.insert(aux.imgs.Codificado, a)
+
+end
+
+auxImg = {"imgs/lvl02/dlvl02TabelaColuna01.png", "imgs/lvl02/dlvl02TabelaColuna02.png", "imgs/lvl02/dlvl02TabelaColuna03.png", "imgs/lvl02/dlvl02TabelaColuna04.png"}
+
+for _, x in ipairs(auxImg) do
+
+    a = loadImage(x)
+    table.insert(aux.imgs.Decodificado, a)
+
+end
+
+table.insert(lvl02.totems, constructors.newTotem(2, 13, aux))
+
+--------------------------------------------------------------------
+
+aux = {
+    typeName = minigameType.DTB,
+    imgs = {
+        Titulo = nil,
+        Codificado = {},
+        Decodificado = {}
+    },
+    answers = {"id_livro", "cpf_leitor", "data", "devolucao"},
+    correctAnswers = {false, false, false, false},
+    completed = false
+}
+
+a = loadImage("imgs/lvl02/lvl02TabelaTitulo02.png")
+aux.imgs.Titulo = a
+
+auxImg = {"imgs/lvl02/clvl02TabelaColuna01_02.png", "imgs/lvl02/clvl02TabelaColuna02_02.png", "imgs/lvl02/clvl02TabelaColuna03_02.png", "imgs/lvl02/clvl02TabelaColuna04_02.png"}
+
+for _, x in ipairs(auxImg) do
+
+    a = loadImage(x)
+    table.insert(aux.imgs.Codificado, a)
+
+end
+
+auxImg = {"imgs/lvl02/dlvl02TabelaColuna01_02.png", "imgs/lvl02/dlvl02TabelaColuna02_02.png", "imgs/lvl02/dlvl02TabelaColuna03_02.png", "imgs/lvl02/dlvl02TabelaColuna04_02.png"}
+
+for _, x in ipairs(auxImg) do
+
+    a = loadImage(x)
+    table.insert(aux.imgs.Decodificado, a)
+
+end
+
+table.insert(lvl02.totems, constructors.newTotem(15, 7, aux))
+
+----------------------------------------------------------------------------------------
+
+aux = {
+    typeName = minigameType.DTB,
+    imgs = {
+        Titulo = nil,
+        Codificado = {},
+        Decodificado = {}
+    },
+    answers = {"cpf", "nome", "email"},
+    correctAnswers = {false, false, false},
+    completed = false
+}
+
+a = loadImage("imgs/lvl02/lvl02TabelaTitulo03.png")
+aux.imgs.Titulo = a
+
+auxImg = {"imgs/lvl02/clvl02TabelaColuna01_03.png", "imgs/lvl02/clvl02TabelaColuna02_03.png", "imgs/lvl02/clvl02TabelaColuna03_03.png"}
+
+for _, x in ipairs(auxImg) do
+
+    a = loadImage(x)
+    table.insert(aux.imgs.Codificado, a)
+
+end
+
+auxImg = {"imgs/lvl02/dlvl02TabelaColuna01_03.png", "imgs/lvl02/dlvl02TabelaColuna02_03.png", "imgs/lvl02/dlvl02TabelaColuna03_03.png"}
+
+for _, x in ipairs(auxImg) do
+
+    a = loadImage(x)
+    table.insert(aux.imgs.Decodificado, a)
+
+end
+
+table.insert(lvl02.totems, constructors.newTotem(9, 8, aux))
+
+---------------------------------------------------------------------------
+
+aux = {
+    typeName = minigameType.DTB,
+    imgs = {
+        Titulo = nil,
+        Codificado = {},
+        Decodificado = {}
+    },
+    answers = {"cpf_pessoa", "registro"},
+    correctAnswers = {false, false},
+    completed = false
+}
+
+a = loadImage("imgs/lvl02/lvl02TabelaTitulo04.png")
+aux.imgs.Titulo = a
+
+auxImg = {"imgs/lvl02/clvl02TabelaColuna01_04.png", "imgs/lvl02/clvl02TabelaColuna02_04.png"}
+
+for _, x in ipairs(auxImg) do
+
+    a = loadImage(x)
+    table.insert(aux.imgs.Codificado, a)
+
+end
+
+auxImg = {"imgs/lvl02/dlvl02TabelaColuna01_04.png", "imgs/lvl02/dlvl02TabelaColuna02_04.png"}
+
+for _, x in ipairs(auxImg) do
+
+    a = loadImage(x)
+    table.insert(aux.imgs.Decodificado, a)
+
+end
+
+table.insert(lvl02.totems, constructors.newTotem(10, 16, aux))
+
+aux = {
+    typeName = "Exit"
+}
+
+table.insert(lvl02.totems, constructors.newTotem(2, 5, aux))
+
+--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
 local tutorial = {
     map = {
         {0,0,0,0,0,0,0},
@@ -275,7 +492,6 @@ aux = {
 }
 
 table.insert(tutorial.totems, constructors.newTotem(6, 6, aux))
-
 
 local map = tutorial.map
 local player = tutorial.player
@@ -438,6 +654,23 @@ local function lvl01Set(pmap, plvl01, pplayer, pplayerStart, penemys, penemysSta
     return pmap, plvl01, pplayer, pplayerStart, penemys, penemysStart, ptotems, pseeDER, psubstate, plvl, pinstrucao, flag
 end
 
+local function lvl02Set(pmap, plvl02, pplayer, pplayerStart, penemys, penemysStart, ptotems, pseeDER, psubstate, plvl, pinstrucao)
+    pmap = deepCopy(plvl02.map)
+    pplayer.position = deepCopy(plvl02.player.position)
+    pplayer.flags = deepCopy(plvl02.player.flags)
+    pplayer = deepCopy(plvl02.player)
+    pplayerStart = deepCopy(plvl02.player.position)
+    penemys = deepCopy(plvl02.enemys)
+    penemysStart = deepCopy(plvl02.enemys)
+    ptotems = deepCopy(plvl02.totems)
+    pseeDER = {false, deepCopy(plvl02.totems[1].tipo.img[plvl02.totems[1].tipo.answer])}
+    psubstate = "instrucao"
+    plvl = "lvl02Run"
+    pinstrucao = loadImage("imgs/lvl02/IG.png")
+
+    return pmap, plvl02, pplayer, pplayerStart, penemys, penemysStart, ptotems, pseeDER, psubstate, plvl, pinstrucao, flag
+end
+
 function love.update(dt)
 
     if state == "Menu" then
@@ -463,7 +696,12 @@ function love.update(dt)
         function love.mousepressed(mx, my, mbutton)
             if mbutton == 1 and mx >= GameOver.continuar.x and mx < GameOver.continuar.x + GameOver.continuar.width and my >= GameOver.continuar.y and my < GameOver.continuar.y + GameOver.continuar.height then
                 state = "inGame"
-                lvl = "lvl01"
+                if lvl == "lvl01Run" then
+                    lvl = "lvl01"
+                else
+                    lvl = "lvl02"
+                end
+                -- lifes = 3
             end
         end
 
@@ -474,7 +712,11 @@ function love.update(dt)
         if lvl == "tutorial" then
             map, tutorial, player, playerStart, enemys, enemysStart, totems, seeDER, substate, lvl = tutorialSet(map, tutorial, player, playerStart, enemys, enemysStart, totems, seeDER, substate, lvl)
         elseif lvl == "lvl01" then
+            lifes = 3
             map, lvl01, player, playerStart, enemys, enemysStart, totems, seeDER, substate, lvl, instrucao, flag = lvl01Set(map, lvl01, player, playerStart, enemys, enemysStart, totems, seeDER, substate, lvl, instrucao)
+        elseif lvl == "lvl02" then
+            lifes = 3
+            map, lvl02, player, playerStart, enemys, enemysStart, totems, seeDER, substate, lvl, instrucao, flag = lvl02Set(map, lvl02, player, playerStart, enemys, enemysStart, totems, seeDER, substate, lvl, instrucao)
         end
 
         if lvl == "tutorialRun" then
@@ -491,7 +733,11 @@ function love.update(dt)
             end
         else
             if flag == true then
-                instrucao = loadImage("imgs/lvl01/lvl01Instrucao.png")
+                if lvl == "lvl01Run" then
+                    instrucao = loadImage("imgs/lvl01/lvl01Instrucao.png")
+                else
+                    instrucao = loadImage("imgs/lvl02/lvl02Instrucao.png")
+                end
             end
         end
     

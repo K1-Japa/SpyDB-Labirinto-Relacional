@@ -31,12 +31,19 @@ local function keyboardInput(player, totems, isDown, substate, currentTotem, tex
                     if player.position[1] == totem.position[1] and player.position[2] == totem.position[2] then
                         substate = totem.tipo.typeName
 
-                        if substate == "Exit" and player.flags == #totems-1 then
-                            if lvl == "tutorialRun" then
-                                lvl = "lvl01"
+                        if substate == "Exit" then
+                            if player.flags == #totems-1 then
+                                if lvl == "tutorialRun" then
+                                    lvl = "lvl01"
+                                    substate = "Play"
+                                elseif lvl =="lvl01Run" then
+                                    lvl = "lvl02"
+                                    substate = "Play"
+                                elseif lvl == "lvl02Run" then
+                                    state = "End"
+                                end
+                            else
                                 substate = "Play"
-                            elseif lvl =="lvl01Run" then
-                                state = "End"
                             end
                         elseif substate == "Decodificar Tabelas" and player.flags == 0 then
                             substate = "Play"
